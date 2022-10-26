@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<style type='text/css'>
+   .my-input{
+        width:100%;
+        background:rgb(237, 237, 239);
+        font-weight:500;padding-left:41px;
+        border-radius:5px; 
+        border: 1px solid rgb(237, 237, 239);
+        outline-color: #ededef;
+        ouline-with: 0;
+        font-size: 0.9rem;
+        font-weight: 400;
+        padding: 5px;
+   }
+   .my-input:focus {
+        border: 1px solid rgb(201, 221, 225);
+   }
+
+    .image-wrapper{
+        width: 165px;
+        border: 2px dashed gray;
+        border-radius: 4px;
+    }
+
+    .photo-label{
+        background: #6c6c6c;
+        color: white;
+        bottom: 0;
+        left: 0;
+        margin: 6px;
+        width: calc(100% - 12px);
+        border-radius: 4px;
+        padding: 4px;
+    }
+
+    .image-wrapper .fa-image{
+        font-size: 29px;
+        color: #808080;
+        margin-top: 30px;
+    }
+        
+    select.my-input{
+        padding:3px;
+    }
+    .link-create label{
+        font-size: 0.9rem;
+        padding-bottom: 3px;
+    }
+
+    .btn-secondary {
+        color: #fff;
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+    button.btn-secondary:hover {
+        color: #fff;
+        background-color: #5a6268!important;
+        border-color: #545b62!important;
+    }
+       
+</style>
+<div class="container pt-4 link-create">
+
+    <div class="row">
+        <div class="col-8 offset-2">
+            <!--begin:: LINK FORM-->
+            <p class="fs-3"> Element qo'shish</p>
+            <form class="card link-card bg-white p-4" method="POST" style="border-radius: 6px;" id="addElementForm" enctype="multipart/form-data">
+                <div class="d-flex" style="gap: 25px;">
+
+                    <div class="image-wrapper text-center position-relative" >
+                        <img src=" "class = "d-none"/>
+                        <i class="fa-solid fa-image"></i>
+                        <label for="uploadImage" class="position-absolute  text-white photo-label" role="button">
+                        <input type="file" name="photo" class="d-none" id="uploadImage" />
+                            Rasm yuklash
+                        </label>
+                        <button class="d-none">O'chirish</button>
+                    </div>  
+                                      
+                    <div class="inputs-wrapper w-100" >
+                        <label for='name' class="mb-1">Nomi</label>
+                        <input type="text" id='name' name="name" class="my-input mb-2" value="{{form.name.value|default:''}}" required />
+                        <label for='url'  class="mb-1">Url</label>
+                        <input type="url" id='url' name="url" class="my-input" value="{{form.url.value|default:''}}" />
+                    </div>
+
+                </div>
+                        
+
+                <div class="row mt-3"> 
+                    <div class="col-md-6 col-12">
+                        <label class="mb-1" for="section">Bo'lim*</label>
+                        <select class="my-input" name="section" id="section" required>
+                            <option value="">
+                                ------
+                            </option>
+                            {% for section in sections %}
+                                <option value="{{section.id}}" 
+                                {% if form.section.value == section.id|slugify %}selected {% endif %}>
+                                    {{section}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div> 
+                
+                
+                    <div class="col-md-6 col-12">
+                        <label  class="mb-1" for="type">Turi*</label>
+                        <select class="my-input" name="type" id="type" required>
+                            <option value="">
+                                ------
+                            </option>
+                            {% for type in types %}
+                                <option value="{{type.id}}" 
+                                {% if form.type.value == type.id|slugify %} selected {% endif %}>
+                                    {{type.name}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div> 
+
+                </div>
+
+                         
+                <div class="row mt-3">
+                    <div class="col-12">
+                         <label  class="mb-1"> Qisqacha tavsifi</label>
+                         <textarea class="my-input" name="short_description" required>{{form.short_description.value|default:''}}</textarea>
+                    </div>
+                </div>
+
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                         <label  class="mb-1"> Batafsil tavsifi</label>
+                         <textarea class="my-input" name="description" required>{{form.description.value|default:''}}</textarea>
+                    </div>
+                </div>
+
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                         <label  class="mb-1"> Teglar</label>
+                         <select class="my-input" name="tools" multiple>
+                            <option value="">------</option>
+                            {% for tool in tools %}
+                                <option value="{{tool.id}}" {% if tool.id|slugify in form.tools.value %} selected {% endif %}>{{tool.name}}</option>
+                            {% endfor %}
+                         </select>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                         <label  class="mb-1"> Qaysi kompaniya/muassasaga tegishli</label>
+                         <select class="my-input" name="company">
+                            <option value="">------</option>
+                             {% for company in companies %}
+                                <option value="{{company.id}}" {% if form.company.value == company.id|slugify %} selected {% endif %}>
+                                     {{company.name}}
+                                </option>
+                             {% endfor %}
+                         </select>
+                    </div>
+                </div>
+
+                <label for="iown" class="d-flex align-items-center mt-3">
+                    <input type="checkbox" name="own" id="iown" class="me-2" />
+                    Menga tegishli
+                </label>
+
+
+                {% csrf_token %}
+                <div class="mt-3 text-end">
+                    <button class="btn-secondary rounded text-white border-0 py-2 px-3" >
+                         Saqlash va boshqa qo'shish</button>
+                    <button class="bg-main rounded text-white border-0 py-2 filter px-4"> 
+                        Saqlash</button>
+                </div>
+            </form>
+      
+        </div>
+    </div>
+  
+    <br>
+    <br>
+    <br> 
+</div>
+
+
+
+
+
+{% endblock content %}
+
+
+{% block js %}
+<script type="text/javascript">
+    document.getElementById('addElementForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!document.getElementById("uploadImage").value){
+            alert('Iltimos rasm yuklang!!!')
+            return;
+        }
+        //console.log('hi', document.getElementById("uploadImage").value)
+        document.getElementById('addElementForm').submit()
+    }) 
+ 
+</script>    
+{% endblock js %}
+
+{% comment %} <!--
+<!DOCTYPE html5>
+<html>
+    <head>
+        <title>Havola.uz</title>
+    </head>
+    <body>
+        <h1 style="text-align:center">Havola qo'shish</h1>
+    
+        <h2>HTML Forms</h2>
+
+        {% comment %} <form action="" method="POST"  class="" id="">
+        
+            <label for="">Link name:</label> <br>
+            <input type="text" name="name" placeholder="link nomini yozing..."
+                 value="{{data.name}}"    required />
+            <small style="color:red;"> {% if errors.name %}{{errors.name}}{% endif %} </small>
+            <br><br>
+
+            <label for="">Link description:</label> <br>
+            <textarea name="description" placeholder="link haqida izoh.."
+                >{{data.description}}</textarea>
+            </br><br>
+            
+            <label for=""> Link url</label> </br>
+            <input type="text" name="url" placeholder="link urlini ko'rsating" 
+                value="{{data.url}}" required />
+            <small style="color:red;"> {% if errors.url %}{{errors.url}}{% endif %} </small>
+            
+            <br><br>
+            
+            <input type="submit" value="Yuborish">
+            {% csrf_token %}
+        </form>  
+        <form method="POST"> {% csrf_token %}
+            {{form.as_p}}
+            {{form.as_ul}}  
+            <input type="submit" value="Yuborish">
+        </form>
+
+        <p>"Yuborish" tugmasi bosilganda kiritilgan ma'lumotlar POST metodi orqali
+            serverga jo'natiladi!!.</p>
+
+    </body>
+</html>
+--> {% endcomment %}

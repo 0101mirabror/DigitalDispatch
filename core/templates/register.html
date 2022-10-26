@@ -1,0 +1,66 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <title>Havola.uz</title>
+    </head>
+    <body>
+        <h1 style="text-align:center">Ro'yxatdan o'tish</h1>
+    
+        <h2>Register Form</h2>
+        <form method="POST"> 
+            
+            {% csrf_token %}
+            
+            <!-- Formadagi umumiy xatoliklar -->
+            {% for error in form.non_field_errors %}
+                <p style="color:red">{{error}}</p>
+            {% endfor %}
+
+            <div class="username">
+                {{form.username.label}} <!-- label -->
+                {{form.username}}  <!-- input-->
+
+                <!-- Ayni shu inputga tegishli errorlar -->
+                {% if form.errors.username %}
+                    <small style="color:red;">{{form.errors.username}}</small>
+                {% endif %}
+            </div>
+
+            <div class="email">
+                {{form.email.label}}
+                {{form.email}}
+            </div>
+
+            <div class="">
+                {{form.password.label}}
+                {{form.password}}
+                
+                {% if form.errors.password %}
+                    <small style="color:red;">{{form.errors.password}}</small>
+                {% endif %}
+            </div>
+
+            <div class="">
+                {{form.password_confirmation}}
+                
+                {% if form.errors.password_confirmation %}
+                    <small style="color:red;">
+                        {% comment %} {{form.errors.password_confirmation}} {% endcomment %}
+                        {% for error in form.errors.password_confirmation  %}
+                            {{error}}
+                        {% endfor %}
+                    </small>
+                {% endif %}
+            
+            </div>
+
+            <div class="">
+                {{form.description}}
+            </div>
+        
+            <input type="submit" value="Yuborish">
+        
+        </form>
+
+    </body>
+</html>

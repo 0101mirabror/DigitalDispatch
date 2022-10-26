@@ -1,0 +1,31 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <title>Havola.uz | {{link.name}}</title>
+    </head>
+    <body>
+        <div style="background: lightgray; padding: 10px;">
+            <h1>{{link.name}}</h1>
+            <p>{{link.description}}</p>
+            <a href="{{link.url}}" style="padding:5px 7px; background: blue; color:white;">
+                Havolaga o'tish
+            </a>
+            <p style="text-align:right"> {{link.created_at}}
+            <p style ="text-align:right" >{{link.views_count}}</p>
+            {% comment %}
+
+             {{link.created_at|date:"D d M Y"}} {{link.created_at|time:"H:i"}}  
+            
+            {% endcomment %}
+            
+            </p>
+            
+            <!-- 
+                <p>Mana bu keraksiz text</p> 
+            
+                <h1>Bu keraksiz sarlavha</h1>
+            -->
+            
+        </div>
+    </body>
+</html>

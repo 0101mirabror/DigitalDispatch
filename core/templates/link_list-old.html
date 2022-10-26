@@ -1,0 +1,26 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <title>Havola.uz</title>
+    </head>
+    <body>
+        <h1>Havolalar</h1>
+        <h2>{{ title }}</h2>
+        
+        {% for link in linklar %}
+            <h2>
+                <a href="{{link.url}}">{{link.id}}. {{link.name}} </a>
+
+                {% if link.id == 3 %} 
+                    <small style="color:red">Ushbu link IDisi 3.</small>
+
+                {% elif shart %}
+                    logika ...
+                {% else %}
+                    <small style="color:green">Ushbu link IDisi 3 emas!!</small>
+                {% endif %}
+            </h2>
+        {% endfor %}
+
+    </body>
+</html>

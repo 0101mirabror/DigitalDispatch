@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block header %}
+{% endblock header %}
+
+{% block content %}
+
+    <div class="container">
+    
+        <div class="row mt-4 pt-4">
+            <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-sm-12">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <img src="https://havola.uz/static/img/havola-logo.svg" class="mb-1" width="50px"/>
+                        <h5 class="card-title">Kirish</h5>
+                        
+                        <form action='' method='POST'>
+                            
+                            <div class="mb-3 text-start">
+                                <div class="row mb-2">
+                                    <div class="col-12">
+                                        <label for="email" class="form-label">Email address</label>
+                                        <input type="email" id="email" name="email" placeholder="name@example.com"
+                                            class="form-control {% if form.email.errors %}is-invalid{% endif %}" 
+                                            value="{{form.email.value|default:''}}" >
+                                        
+                                        {% if form.email.errors %}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.email.errors %}
+                                                    {{error}}    
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>    
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-12">
+                                        <label for="password" class="form-label">Parol</label>
+                                        <input type="password" name="password" placeholder="********"
+                                            class="form-control {% if form.password.errors %}is-invalid{% endif %}" 
+                                            id="password" value="{{form.password.value|default:''}}">
+                                        {% if form.password.errors %}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.password.errors %}
+                                                    {{error}}    
+                                                {% endfor %}
+                                        {% endif %}
+                                        
+                                        <div class="form-text text-end">
+                                            <a href="" style="text-decoration:none;">Parolni unutdingizmi?</a>
+                                        </div>
+                                    </div>    
+                                </div>
+                            </div>
+            
+                            {% csrf_token %}
+                            <div class="text-center">
+                                <button type='submit' class="btn btn-warning text-white px-4 mb-2">Kirish</button>
+                                <p>Yangimisiz? <a href="" style="text-decoration:none;" >Ro'yxatdan o'tish</a></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock  %}

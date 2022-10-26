@@ -1,0 +1,25 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <title>Havola.uz | {{link.name}}</title>
+    </head>
+    <body>
+        <h1 style="text-align:center">Havolani tahrirlash</h1>
+    
+        <h2>HTML Forms</h2>
+
+        <form action="" method="POST"  class="" id="" enctype="multipart/form-data">
+        
+            {{form.as_p}}
+
+            {% comment %} {{form.name}} {% endcomment %}
+
+            <input type="submit" value="Yuborish">
+            {% csrf_token %}
+        </form> 
+
+        <p>"Yuborish" tugmasi bosilganda kiritilgan ma'lumotlar POST metodi orqali
+            serverga jo'natiladi!!.</p>
+
+    </body>
+</html>

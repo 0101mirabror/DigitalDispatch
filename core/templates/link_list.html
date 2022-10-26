@@ -1,0 +1,500 @@
+{% extends 'base.html' %}  {% load bookmarking %}
+
+
+{% block content %}
+<style type="text/css">
+
+
+
+
+
+    .like-btn.active, .bookmark-btn.active {
+        background-color: #ffc289!important;
+        color: white;
+    }
+    .like-btn.active:hover, .bookmark-btn.active:hover{
+        background-color: #ffc289!important;
+        color: white;
+    }
+    
+</style>
+<div class="container pt-4">
+
+    <div class="row">
+        <div class="col-8 offset-2">
+            <!--begin:: LINK tYPEs-->
+            <ul class="link-categories d-flex flex-row flex-wrap px-3 justify-content-center" style="gap:5px">
+                <li class="shadow {% if not type_slug %} active {% endif %}" ><a href="/{{section.slug}}">Barchasi</a></li>
+                {% for type in linktypes %}
+                <li class="shadow {%if type_slug == type.slug %} active {%endif%}"><a href="/{{section.slug}}/{{type.slug}}"  >{{type.name}}</a></li>
+                 {% endfor %}
+                {% comment %} <li class="shadow"><a href="areas/design" >Dizayn</a></li> {% endcomment %}
+            </ul>
+            <!--end: LINK TYPES-->
+            {% comment %} <p class="text-center" style="font-size: 1.1rem;" >Axborot texnologiyalarining eng muhim hamda talabgir sohalari va yo'nalishlari</p> {% endcomment %}
+            <p class="text-center" style="font-size: 1.1rem;" >{{section.short_description}}</p>
+        </div>
+    </div>
+<!--
+    <div class="row">
+        <div class="col-8 offset-2">
+            begin:: LINK tYPEs-
+            <ul class="link-categories d-flex flex-row flex-wrap px-3 justify-content-center" style="gap:5px">
+
+                <li class="shadow active"><a>BARCHASI</a></li>
+                <li class="shadow"><a>API</a></li>
+                <li class="shadow"><a>CMS</a></li>
+                <li class="shadow"> DASTURLASH TILI</li>
+                <li class="shadow">DEVOPS</li>
+                <li class="shadow"> DIZAYN</li>
+                <li class="shadow">FREYMVORK</li>
+                <li class="shadow">GUI</li>
+                <li class="shadow">HOSTING / SERVER</li>
+                <li class="shadow">IDE</li>
+                <li class="shadow">IZLASH</li>
+                <li class="shadow">KOD MUHARRIRI</li>
+                <li class="shadow">KUTUBXONA</li>
+                <li class="shadow">LOYIHANI BOSHQARISH</li>
+                <li class="shadow">MA'LUMOTLAR OMBORI</li>
+                <li class="shadow">MANBA KODI</li>
+            </ul>
+            <!--end: LINK TYPES--
+            <p class="text-center" style="font-size: 1.1rem;" >Axborot texnologiyalarining eng muhim hamda talabgir sohalari va yo'nalishlari</p>
+        </div>
+    </div>
+-->
+
+   
+    
+    <div class="row my-2">
+        
+        <div class="col-8 offset-2 px-4">
+            <div class="filter-buttons d-flex justify-content-between"   >
+                
+                <span class="dropdown-toggle bg-white custom-shadow px-2 py-1 rounded"
+                    id="toggleFilter" role="button">
+                     
+                    <i class="fa-solid fa-filter"></i>
+
+                </span>
+
+                <span class="d-flex" style="gap: 6px;">
+                    <span>
+                        <a class="nav-link dropdown-toggle bg-main plus text-white custom-shadow px-2 py-1 rounded" 
+                            href="/create" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-plus" role='button'></i>
+                        </a>
+                    </span>
+                    {% comment %} <span>
+                        <i class="fa-solid fa-plus"></i>
+                    </span> {% endcomment %}
+
+                    
+                    <span class="dropdown" style="padding:4px;">          
+                        <span class="dropdown-toggle bg-white custom-shadow px-2 py-1 rounded" id='sortDropdown' data-bs-toggle='dropdown'
+                              role="button">
+                            <i class="fa-solid fa-arrow-down-a-z"></i>
+                        </span>
+                        <ul class="dropdown-menu border-0 custom-shadow" aria-labelledby="sortDropdown"data-base-popper="none">
+                            <li><span class="dropdown-item sort" role="button" data-value='name' onclick="chooseSort(event)" >A-Z</span></li>
+                            <li><span class="dropdown-item sort" role="button" data-value='-name' onclick="chooseSort(event)" >Z-A</span></li>
+                            <li><span class="dropdown-item sort" role="button" data-value='-rating' onclick="chooseSort(event)" >Yuqori reytingdagilar</span></li>
+                            <li><span class="dropdown-item sort" role="button" onclick="chooseSort(event)" data-value='-created_time'>Eng so'nggilari</span></li>
+                        </ul>
+                    </span>
+                    
+                </span>
+                
+              
+            </div>
+            <div class="filter-options  {% if not request.GET.filter %} d-none {% endif %}  link-card card mx-auto py-3 px-1 mt-2"
+                style="border-radius:7px;">
+            
+                <!--filter--> 
+                <form method="GET" class="row flex-row w-100 mx-auto" id='filterForm'>
+                    <div class="col-8 col-md-9 ">
+                        <select class='form-control form-select py-1'
+                            name="filter"
+                            style="background-color:#ededef;"
+                                role="button">
+                            <option value="">Tanlang</option>
+                            {% for foption in filter_options %}
+                            <option value="{{foption.slug}}" {% if request.GET.filter == foption.slug %} selected {%endif%}>{{foption.name}}</option>
+                            {% endfor %}
+                            {% comment %} <option value=''>3D/Grafika</option>
+                            <option value=''>1C Bitrix</option>
+                            <option value=''>Frontend</option> {% endcomment %}
+                        </select> 
+                        <input type='hidden' name='sort' value = "{{request.GET.sort}}" id="sort"/>
+                    </div>
+                    <!--button-->
+                    <div class="col-4 col-md-3">
+                        <button type="submit" class="w-100 bg-main text-white border-0 py-1 rounded filter"  type='submit'>Filterlash</button>                     
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+  <!--begin:: List of links-->
+    <div class="row" id="linkWrapper" data-page-number="1">
+        
+        {% for link in links %}
+            <div class="col-8 offset-2 px-4 mb-3">
+                <!--begin:: SINGLE LINK CARD-->
+                <div class="link-card card border-0 d-flex flex-row p-1" style="border-radius:7px;">
+                    <div class="image-wrapper m-2 overflow-hidden" style="width:75px;height:75px;">
+                        <a src="">
+                            <img class="w-100" src="{{link.photo.url}}"/>
+                        </a>    
+                    </div>
+
+                    <div class="content-wrapper my-2 px-1 d-flex flex-row" style="width: calc(100% - 80px);">
+                        <div class="content w-100">
+                            <div class="link-title">
+                                <h3 class="mb-0">
+                                    <a href="/e/{{link.slug}}" class="text-main-hover">{{link.name}}</a>
+                                </h3>
+                            </div>
+
+                            <div class="link-type">
+                                <a class="mb-0 text-decoration-none text-hover-black" style="color: #808080c4;">{{link.type}}</a>
+                            </div>
+
+                            <div class="link-short-description">
+                                <p class='mb-0'>{{link.short_description}}</p>
+                            </div>
+                            {% if link.tools.count > 0  %}
+                            <div class="tools">
+                                {% for tool in link.tools.all %}
+                                    <a href="tool/{{tool.slug}}" class="text-decoration-none text-hover-black" 
+                                            style="color: #808080c4; font-size:0.7rem; font-weight:500;  margin-right: 3.5px;
+                                            font-size: 0.7rem;
+                                            /* font-weight: 500; */
+                                            padding: 5px 6px;
+                                            background-color: #ededefe3;
+                                            border-radius: 2px;">
+
+                                        <img src="{{tool.photo.url}}" width="13px" height="13px" />
+                                        <span class="">{{tool.name}}</span>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            <div class="link-buttons pt-2 d-flex pb-1" style="gap: .7rem;">
+                                {% comment %} <button class="shadow border-0 bg-white gray-color" style="border-radius:4px;"><i class="fa-solid fa-graduation-cap"></i></button>
+                                <button class="shadow border-0 bg-white gray-color" style="border-radius:4px;"><i class="fa-solid fa-book-open"></i></button>
+                                <button class="shadow border-0 bg-white gray-color" style="border-radius:4px;"><i class="fa-solid fa-star"></i></button> {% endcomment %}
+
+                                {% is_bookmarked link request.user 'K' as is_known %}
+                                <button class="shadow border-0 bg-white gray-color bookmark-btn {% if is_known %}active{% endif %}"
+                                        data-status='K' data-link-id="{{link.id}}" style="border-radius:4px;">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </button>
+    
+                                {% is_bookmarked link request.user 'L' as is_learning %}
+                                <button class="shadow border-0 bg-white gray-color bookmark-btn {% if is_learning %}active{% endif %}"
+                                        data-status='L' data-link-id="{{link.id}}" style="border-radius:4px;">
+                                    <i class="fa-solid fa-book-open"></i>
+                                </button>
+    
+                                {% is_bookmarked link request.user 'W' as is_wondered %}
+                                <button class="shadow border-0 bg-white gray-color bookmark-btn {% if is_wondered %}active{% endif %}"
+                                        data-status='W' data-link-id="{{link.id}}" style="border-radius:4px;">
+                                    <i class="fa-solid fa-star"></i>
+                                </button>                                
+
+                                {% if link.url%}
+                                    <a class="shadow border-0 bg-white ms-2 px-2 text-main-light btn-yellow text-decoration-none"
+                                    style="border-radius:4px;cursor:pointer;">
+                                    <i class="fa-solid fa-up-right-from-square"></i> Havola
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+<!--BUTTON UP OR DOWN -->
+                        <div class="like-wrapper d-flex flex-column align-items-center my-2 ms-4 me-2">
+
+                            <button class="shadow border-0 bg-white gray-color like-btn{%if request.user.id in link.liked_users%}active{%endif%}"   style="border-radius:4px;"
+                                    data-type="like" data-obj-type="link" data-obj-id="{{link.id}}">
+                                <i class="fa-solid fa-chevron-up"></i>
+                            </button>
+
+                            <p class="link-rate my-1" id="obj{{link.id}}Like">{{link.likes_count}}</p>
+
+                            <button class="shadow border-0 bg-white gray-color like-btn {%if request.user.id in link.disliked_users%}active{%endif%}"  style="border-radius:4px;"
+                                    data-type="dislike" data-obj-type="link" data-obj-id="{{link.id}}">
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% csrf_token %}
+                <!--end:: SINGLE LINK CARD-->
+            </div>
+        {% endfor %}
+
+
+
+    </div>
+    <!--end:: LIST OF LINKS-->
+
+    {% comment %} <div class="row my-3">
+        <div class="col-8 offset-2 px-4">
+            <div class="link-card card border-0 d-flex flex-row p-1" style="border-radius:7px;">
+                <div class="image-wrapper m-2 overflow-hidden" style="width:75px;height:75px;">
+                    <img class="w-100" src="https://havola.uz/uploads/logos/90/gewzvppa.png"/>
+                </div>
+                
+                <div class="content-wrapper my-2 px-1 d-flex flex-row" style="width: calc(100% - 80px);">
+                    <div class="content w-100">
+                        <div class="link-title">
+                            <h3 class="mb-0">
+                                <a href="" class="text-main-hover">3D Grafika</a>
+                            </h3>
+                        </div>
+                        
+                        <div class="link-type">
+                            <a class="mb-0 text-decoration-none text-hover-black" style="color: #808080c4;">Dizayn</a>
+                        </div>
+                        
+                        <div class="link-short-description">
+                            <p class='mb-0'>Kompyuter grafikasi yordamida obyektning 3 o'lchamli tasvirini yaratish</p>
+                        </div>
+                    
+                        <div class="link-buttons pt-2 d-flex pb-1" style="gap: .7rem;">
+                            <button class="shadow border-0 bg-white gray-color" style="border-radius:4px;"><i class="fa-solid fa-graduation-cap"></i></button>
+                            <button class="shadow border-0 bg-white gray-color" style="border-radius:4px;"><i class="fa-solid fa-book-open"></i></button>
+                            <button class="shadow border-0 bg-white gray-color" style="border-radius:4px;"><i class="fa-solid fa-star"></i></button>
+                            <button class="shadow border-0 bg-white ms-2 text-main-light" style="border-radius:4px;"><i class="fa-solid fa-up-right-from-square"></i> Havola</button>
+                        </div>
+                    </div>
+                    
+                    <div class="like-wrapper d-flex flex-column align-items-center my-2 ms-4 me-2">
+                        
+                        <button class="shadow border-0 bg-white gray-color like-btn" style="border-radius:4px;">
+                            <i class="fa-solid fa-chevron-up"></i>
+                        </button>
+
+                        <p class="link-rate my-1">2</p>
+                        
+                        <button class="shadow border-0 bg-white gray-color like-btn" style="border-radius:4px;">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> {% endcomment %}
+
+    <br>
+    <br>
+    <br> 
+</div>
+
+
+
+
+
+{% endblock content %}
+
+
+{% block js %}
+<script type="text/javascript">
+
+    function chooseSort(e){
+        var sortValue = e.target.dataset.value;
+        document.getElementById('sort').value = sortValue;
+        document.getElementById('filterForm').submit();
+    //function chooseSort(e){
+    //    var value = e.target.dataset.value;
+    //    console.log(value)
+    //    console.log(window.location)
+    //    console.log(e, typeof(e))
+    //    if (window.location.search !== '') {
+    //        if (window.location.search.indexOf('sort=') >= 0){
+    //            var query_params = window.location.search.slice(1)
+    //            query_params = query_params.split('&')
+    //            //window.location = window.location.href;
+    //            new_search = ''
+    //            for (let i=0; i < query_params.length; i++) {
+    //                let current_query_with_value = query_params[i]
+    //                if (current_query_with_value.indexOf('sort=') == 0){
+    //                    new_search = new_search + '&sort=' + value;
+    //                } else {
+    //                    new_search = new_search + '&' + current_query_with_value
+//
+    //                }
+//
+    //            }
+    //            window_location = window.location.origin + window.location.pathname + '?' + new_search; 
+    //        } else {
+    //            window.location.href = window.location.href + "&sort=" + value;
+    //        }
+    //    } else{
+    //        window.location = window.location.href + '?sort=' + value;
+    //}   
+    }
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+   
+        document.getElementById('toggleFilter').addEventListener('click', 
+            function(){
+                var filterWrapper = document.getElementsByClassName('filter-options')[0]
+                filterWrapper.classList.toggle('d-none')         
+            }
+        );
+
+        //document.getElementsByClassName('sort').addEventListener('click',
+        //    function(){
+        //        var value = this.data().value;
+        //        console.log(value)
+        //     }
+        //
+        //);
+            
+     
+
+
+    //Array.from(document.getElementsByClassName('like-btn')).forEach(function(element){
+    //    element.addEventListener('click',
+    //    function(e){
+    //        var type = e.target.dataset.value;
+    //        console.log(type)  
+    //    })
+    //    });
+
+        document.querySelectorAll('.like-btn').forEach(function(element){
+            element.addEventListener('click', function(e){
+                //var type = e.target.dataset.type;
+                {% if user.is_authenticated %}
+                    var type = element.dataset.type;
+                    var objId = element.dataset.objId;
+                    var objType = element.dataset.objType; //data-obj-type == objType chiziqlar tushirib yuboriladi 
+                    //chiziqdan keyingi bog'in  bosh harfda
+                    console.log(type, objType, objId);
+                    console.log(element)
+
+                    const data = { 
+                        'obj_type': objType,
+                        'obj_id' : objId,
+                        'value' : type,
+                        'csrfmiddlewaretoken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                     };
+                     console.log(data)
+                    fetch('http://localhost:8000/like', {
+                      method: 'POST', // or 'PUT'
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(data),
+                    }).then(res => {
+                        console.log(res)
+                        element.classList.toggle('active')
+                        let likesNumber = parseInt(document.getElementById('obj' + objId + 'Like').textContent)
+                        if (type == 'like' && element.classList.contains('active')){
+                            document.getElementById('obj' + objId + 'Like').textContent = likesNumber - 1 
+                        }else if(type=="like") {
+                            document.getElementById('obj' + objId + 'Like').textContent = likesNumber + 1
+                        }
+                        if (type == 'dislike' && element.classList.contains('active')){
+                            document.getElementById('obj' + objId + 'Like').textContent = likesNumber + 1 
+                        }else if(type=="dislike") {
+                            document.getElementById('obj' + objId + 'Like').textContent = likesNumber - 1
+                        }
+                    }).catch((error) => {
+                      console.error('Error:', error);
+                    });
+                {% else %}
+                    alert("ushbu funksiyadan foydalanish uchun iltimos saytda ro'yxatdan o'ting")
+                {% endif %}
+
+            })
+        });
+
+
+        document.querySelectorAll('.bookmark-btn').forEach(function(element){
+            element.addEventListener('click', function(e) {
+
+              {% if request.user.is_authenticated %}
+                var status = element.dataset.status;  // data-status
+                var objId = element.dataset.linkId; // data-link-id --> linkId
+                console.log(status, objId)
+
+                const data = { 
+                    'status': status
+                };
+                console.log(data)
+                fetch(`http://localhost:8000/link/${objId}/bookmark`, {
+                    method: 'POST', // or 'PUT'
+                    headers: {
+                        'Content-Type': 'application/json', 
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(res => {
+                    console.log(res)
+                    element.parentElement.querySelectorAll('.bookmark-btn').forEach(function(btn){
+                        btn.classList.remove('active')
+                    });
+                    element.classList.add('active')                    
+                }).catch((err) => {
+                    //console.error('Error:', err);
+                    //alert('Something went wrong! Please try again later.')
+                });
+              {% else %}
+                alert('Iltimos bu funksiyadan foydalanish uchun avval tizimga kiring!')    
+              {% endif %}
+
+            })
+        })      
+
+        window.onscroll = function(ev) {
+            // check if user scrolled to the bottom of the page
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+
+                let pageNumber = parseInt(document.getElementById('linkWrapper').dataset.pageNumber)+1
+                fetch(`http://localhost:8000/{{slug}}?page=${pageNumber}&format=json`)
+                .then(response => response.json())
+                //.then(data => console.log(data))
+                .then(data => {
+                    document.getElementById('linkWrapper').setAttribute('data-page-number', data['page']);
+                    console.log(data)
+                    data['links'].forEach
+                })                                                     //(name, value)
+                .catch((err) => {
+                    //console.error('Error:', err);
+                    //alert('Something went wrong! Please try again later.')
+                });
+
+            }
+        };
+    });
+</script>
+<!--<script type="text/javascript">
+//    document.addEventListener("DOMContentLoaded", function(event) {
+//   
+//        document.getElementById('toggleFilter').addEventListener('click', 
+//            function(){
+//                var filterWrapper = document.getElementsByClassName('filter-options')[0]
+//                if(filterWrapper.classList.contains('d-none')){
+//                    filterWrapper.classList.remove('d-none')
+//
+//                }
+//                //else if () {}
+//                else
+//                    {
+//                    console.log('else')
+//                    console.log(filterWrapper.classList)
+//                    filterWrapper.classList.add('d-none')
+//                    console.log(filterWrapper.classList)
+//
+//                    }                
+//            }
+//        );
+//    });
+
+</script>
+-->
+{% endblock js %}
