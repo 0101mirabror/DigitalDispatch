@@ -1,2 +1,2 @@
 # havola-uz
-Havola.uz saytining pirototipi
+Havola.uz saytining prototipi
