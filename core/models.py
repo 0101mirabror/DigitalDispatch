@@ -28,7 +28,7 @@ class Section(models.Model):
     name = models.CharField(max_length=100)
     short_description = models.CharField(max_length=200)
     slug = models.SlugField(max_length=50, unique=True)
-    
+    image = models.ImageField(upload_to='home', default="media/companies/j508pcxj.jpg")
     def __str__(self):
         return self.name
 
@@ -81,6 +81,7 @@ class GeneralLink(models.Model):
             author_ids.append(dislike.author.id)
         return author_ids
 
+
 class CompanyType(models.Model):
     name = models.CharField(max_length=150)
     slug = models.SlugField(max_length=150, unique=True)
@@ -114,9 +115,6 @@ class Tag(models.Model):
         return self.name
 
 
-
-
-
 class Like(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owned_likes")
     type = models.CharField(max_length=10, choices=(('like', 'like'), ('dislike', 'dislike')))
@@ -125,6 +123,15 @@ class Like(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="given_likes")
  
+
+class UserProfile(models.Model):
+    name = models.CharField(max_length=60)
+    username = models.CharField(max_length=20)
+    competency= models.ManyToManyField(GeneralLink, related_name='competency')
+    usage = models.ManyToManyField(GeneralLink, related_name="usage")
+    learning = models.ManyToManyField(GeneralLink, related_name="learning")
+    wish = models.ManyToManyField(GeneralLink, related_name="wish")
+
 # TABLES (DATABASE) RELATIONS
 
 # Link  *   --->  1  Section

@@ -9,6 +9,20 @@ from django.utils.text import slugify
 from django.views.decorators.csrf import csrf_exempt
 from users.models import BookmarkedLink
 from core.forms import GeneralLinkForm
+from django.views import View
+# from django.contrib.auth.models import User
+from mylinks.settings import AUTH_USER_MODEL
+User = AUTH_USER_MODEL
+class ListUser(View):
+    def get(self, request, *args, **kwargs):
+        # users = User.objects.all()
+        context = {
+             
+            'user': User
+        }
+        print("\nnn\n\n\n\n\n\n\n\n\n", type(User))
+        return render(request, 'user_list.html', context)
+
 
 def link_list(request, slug, type_slug=None):
     
@@ -33,7 +47,7 @@ def link_list(request, slug, type_slug=None):
         links = links.order_by(sort)
     page = int(request.GET.get('page', 1)) # har bir page da 10tadan link chiqsin
     format = request.GET.get('format', 'html')
-    links = links[(page-1)*3:page*3]  # page=1 -> links[0:10] | page=2  -> links[10:20]  
+    links = links[(page-1)*10:page*10]  # page=1 -> links[0:10] | page=2  -> links[10:20]  
     context = {
         'section': section, 
         'links': links,
@@ -145,7 +159,7 @@ def link_create(request):
             new_link.slug = slugify(new_link.name)
             print('SALOM', new_link)
             new_link.save()
-            return redirect('/')
+            return redirect('havola/success')
     print(form.errors)
     return render(request, 'link_create.html', context) # 200 HTTP
 
