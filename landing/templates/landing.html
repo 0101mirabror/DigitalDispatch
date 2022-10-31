@@ -1,0 +1,50 @@
+ 
+{%  extends 'base.html' %}
+{% block content %}
+<body >
+    <div class="container">
+            <h1 class="text-center mt-5">Havola.uz - Axborot texnologiyalari olamidagi sizning yordamchingiz</h1>
+            
+                <div class="">                     
+                    <div class="row d-flex">
+                    {% for section in sections %}
+                        <div class="col-sm-4 text-center">
+                            {% if section.name == 'Sohalar'%}
+                            <div  style="position:absolute;">
+                                <img src="{{ section.image.url }}" width='200' height="200">
+                                <a href="">{{section.name}}</a>
+                            </div>
+                            {% endif %}
+                             
+                        </div>
+                        <div class=" text-center">
+                            {% if section.name == 'Muassasalar'%}
+                                <a href="">MUSASSALAR</a>
+                                <img src="{{ section.image.url }}" width='200' height="200">
+                            {% endif %}
+                             
+                        </div>
+                        <div class="col-sm-4   text-center"> 
+                            {% if section.name == 'Vositalar'%}
+                                <a href="">VOSITALAR</a>
+                                <img src="{{ section.image.url }}" width='200' height="200">
+                            {% endif %}
+                        </div> 
+                        <div class="  text-center">
+
+                            {% if section.name == 'Manbalar'%}
+                            <a href="">MANBALAR</a>
+                            <img src="{{ section.image.url }}" width='200' height="200">
+                            {% endif %}
+                        </div> {% comment %}{% endcomment %}
+                    </div>
+                    {%  endfor %}
+
+                </div>
+            </div>
+            
+             
+         
+    </div>
+</body>
+{% endblock content %}
